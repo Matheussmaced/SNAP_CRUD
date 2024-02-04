@@ -1,7 +1,6 @@
-import { env } from './env'
-import { app } from './server'
+import fastify from 'fastify'
+import { users } from './routes/users'
 
-app.listen({
-  host: '0.0.0.0',
-  port: env.PORT,
-})
+export const app = fastify()
+
+app.register(users)
