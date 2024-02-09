@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import { prisma } from '../lib/prisma'
 
 export async function users(app: FastifyInstance) {
   app.get('/users', async (request, reply) => {
@@ -13,5 +14,14 @@ export async function users(app: FastifyInstance) {
     })
 
     const { email, password } = createUserSchema.parse(req.body)
+
+    await prisma.users.create({
+      data: {
+        email,
+        password_hash: password,
+      },
+    })
+
+    return reply.status(201).send()
   })
 }
